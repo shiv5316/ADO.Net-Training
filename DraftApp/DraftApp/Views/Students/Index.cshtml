@@ -1,0 +1,69 @@
+﻿@model IEnumerable<DraftApp.Models.Student>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Students</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New</a>
+</p>
+
+<br />
+
+<!-- 🔎 Search Box -->
+<input type="text" id="searchInput" placeholder="Search name or email..."
+       class="form-control" style="max-width:300px; margin-bottom:10px;" />
+
+<table class="table table-bordered" id="studentsTable">
+    <thead>
+        <tr>
+            <th>Full Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Status</th>
+            <th>Join Date</th>
+            <th>Created At</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.FullName</td>
+                <td>@item.Email</td>
+                <td>@item.Phone</td>
+                <td>@item.Status</td>
+                <td>@item.JoinDate.ToShortDateString()</td>
+                <td>@item.CreatedAt</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.StudentId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.StudentId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.StudentId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- 🔎 JavaScript Search -->
+<script>
+    document.getElementById("searchInput").addEventListener("keyup", function () {
+
+        var filter = this.value.toLowerCase();
+        var rows = document.querySelectorAll("#studentsTable tbody tr");
+
+        rows.forEach(function (row) {
+            var name = row.cells[0].textContent.toLowerCase();
+            var email = row.cells[1].textContent.toLowerCase();
+
+            if (name.includes(filter) || email.includes(filter)) {
+                row.style.display = "";
+            } else {
+                row.style.display = "none";
+            }
+        });
+    });
+</script>
